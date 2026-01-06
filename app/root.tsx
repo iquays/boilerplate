@@ -7,6 +7,9 @@ import {
   ScrollRestoration,
 } from "react-router";
 
+import { AppHeader } from "~/modules/common/components/app-header";
+import { AppFooter } from "~/modules/common/components/app-footer";
+import { ThemeProvider } from "~/modules/common/components/theme-provider";
 import type { Route } from "./+types/root";
 import "./app.css";
 
@@ -31,8 +34,26 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <Meta />
         <Links />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                const storageKey = 'app-theme';
+                const theme = localStorage.getItem(storageKey) || 'system';
+                const root = document.documentElement;
+                
+                if (theme === 'system') {
+                  const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+                  root.classList.add(systemTheme);
+                } else {
+                  root.classList.add(theme);
+                }
+              })();
+            `,
+          }}
+        />
       </head>
-      <body>
+      <body className="flex min-h-screen flex-col">
         {children}
         <ScrollRestoration />
         <Scripts />
@@ -42,7 +63,15 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
-  return <Outlet />;
+  return (
+    <ThemeProvider defaultTheme="system" storageKey="app-theme">
+      <AppHeader />
+      <main className="flex-1">
+        <Outlet />
+      </main>
+      <AppFooter />
+    </ThemeProvider>
+  );
 }
 
 export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
