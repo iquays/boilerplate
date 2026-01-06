@@ -7,8 +7,8 @@ import {
   ScrollRestoration,
 } from "react-router";
 
-import { AppHeader } from "~/modules/common/components/app-header";
 import { AppFooter } from "~/modules/common/components/app-footer";
+import { AppHeader } from "~/modules/common/components/app-header";
 import { ThemeProvider } from "~/modules/common/components/theme-provider";
 import type { Route } from "./+types/root";
 import "./app.css";

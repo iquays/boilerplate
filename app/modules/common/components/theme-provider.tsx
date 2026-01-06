@@ -18,7 +18,8 @@ const initialState: ThemeProviderState = {
   setTheme: () => null,
 };
 
-const ThemeProviderContext = React.createContext<ThemeProviderState>(initialState);
+const ThemeProviderContext =
+  React.createContext<ThemeProviderState>(initialState);
 
 export function ThemeProvider({
   children,
@@ -26,12 +27,10 @@ export function ThemeProvider({
   storageKey = "vite-ui-theme",
   ...props
 }: ThemeProviderProps) {
-  const [theme, setTheme] = React.useState<Theme>(
-    () => {
-      if (typeof window === "undefined") return defaultTheme;
-      return (localStorage.getItem(storageKey) as Theme) || defaultTheme;
-    }
-  );
+  const [theme, setTheme] = React.useState<Theme>(() => {
+    if (typeof window === "undefined") return defaultTheme;
+    return (localStorage.getItem(storageKey) as Theme) || defaultTheme;
+  });
 
   React.useEffect(() => {
     const root = window.document.documentElement;
